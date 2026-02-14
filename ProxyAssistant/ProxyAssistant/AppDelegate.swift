@@ -5,7 +5,6 @@
 //  Created by Oleg Kr on 25.01.2026.
 //
 
-
 import Cocoa
 
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -15,7 +14,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        statusItem.button?.image = NSImage(systemSymbolName: "network", accessibilityDescription: nil)
+        
+        // App icon image.
+        let image = NSImage(systemSymbolName: "network", accessibilityDescription: nil)
+        image?.isTemplate = true
+        statusItem.button?.image = image
+        statusItem.button?.contentTintColor = nil
 
         let menu = NSMenu()
         menu.autoenablesItems = false
@@ -59,12 +63,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func updateMenuState() {
         let iface = UserDefaults.standard.string(forKey: "interface") ?? "Wi-Fi"
-
         let anyEnabled = ProxyService.shared.isAnyProxyEnabled(interface: iface)
+        
         enableProxyItem.isEnabled = !anyEnabled
         disableProxyItem.isEnabled = anyEnabled
-    }
+        updateStatusIcon(isEnabled: anyEnabled)
 
+        print("anyEnabled =", anyEnabled)
+    }
+    
+    private func updateStatusIcon(isEnabled: Bool) {
+        guard let button = statusItem.button else { return }
+
+        let symbolName = isEnabled
+            ? "network.badge.shield.half.filled"
+            : "network"
+
+        let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: nil)
+        image?.isTemplate = true
+
+        button.image = image
+    }
+    
     @objc func enableProxy() {
         let ip = UserDefaults.standard.string(forKey: "proxyIP") ?? ""
         let port = UserDefaults.standard.string(forKey: "proxyPort") ?? ""
@@ -72,14 +92,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let proto = UserDefaults.standard.string(forKey: "proxyProtocol") ?? "socks"
 
         ProxyService.shared.enableProxy(ip: ip, port: port, interface: iface, proto: proto)
+        
         updateMenuState()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self.updateMenuState() }
     }
 
     @objc func disableProxy() {
         let iface = UserDefaults.standard.string(forKey: "interface") ?? "Wi-Fi"
 
         ProxyService.shared.disableProxy(interface: iface)
+        
         updateMenuState()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self.updateMenuState() }
     }
 
     @objc func openSettings() {

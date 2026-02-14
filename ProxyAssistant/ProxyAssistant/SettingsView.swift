@@ -48,7 +48,7 @@ struct SettingsView: View {
                         Text(item)
                     }
                 }
-                .frame(width: 200)
+                .frame(width: 125)
             }
 
             HStack {
@@ -62,7 +62,7 @@ struct SettingsView: View {
             Spacer()
         }
         .padding(20)
-        .frame(width: 340, height: 210)
+        .frame(width: 340, height: 200)
     }
 
     func save() {
@@ -73,4 +73,8 @@ struct SettingsView: View {
         
         NSApp.keyWindow?.close()
     }
+}
+
+#Preview {
+    SettingsView()
 }
