@@ -1,5 +1,5 @@
 //
-//  ProxyTestError.swift
+//  ProxyChecker.swift
 //  ProxyAssistant
 //
 //  Created by Oleg Kr on 14.02.2026.
