@@ -14,8 +14,8 @@ enum ProxyTestError: Error {
     case badResponse
 }
 
-final class ProxyTester {
-    static let shared = ProxyTester()
+final class ProxyChecker {
+    static let shared = ProxyChecker()
     private init() {}
 
     func testProxy(ip: String, port: String, proto: String, testUrl: String) async -> Result<String, Error> {

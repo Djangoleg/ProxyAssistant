@@ -163,7 +163,7 @@ struct SettingsView: View {
 
             if systemProxyEnabled {
                 currentTestMode = .proxy
-                res = await ProxyTester.shared.testProxy(
+                res = await ProxyChecker.shared.testProxy(
                     ip: ip,
                     port: port,
                     proto: proto,
@@ -171,7 +171,7 @@ struct SettingsView: View {
                 )
             } else {
                 currentTestMode = .direct
-                res = await ProxyTester.shared.testDirect(testUrl: testUrl)
+                res = await ProxyChecker.shared.testDirect(testUrl: testUrl)
             }
 
             await MainActor.run {

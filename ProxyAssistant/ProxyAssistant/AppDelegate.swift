@@ -72,12 +72,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let iface = d.string(forKey: "interface") ?? "Wi-Fi"
         let testUrl = d.string(forKey: "testUrl") ?? "https://ifconfig.co/ip"
 
-        // Проверяем только если в системе прокси реально включён (иначе не спамим)
+        // We only check if the proxy is actually enabled in the system (otherwise we don't spam).
         let anyEnabled = ProxyService.shared.isAnyProxyEnabled(interface: iface)
         guard anyEnabled else { return }
 
         Task {
-            let res = await ProxyTester.shared.testProxy(ip: ip, port: port, proto: proto, testUrl: testUrl)
+            let res = await ProxyChecker.shared.testProxy(ip: ip, port: port, proto: proto, testUrl: testUrl)
             switch res {
             case .success:
                 break
@@ -144,7 +144,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func testProxyOnceAndNotifyIfFail() {
-        // отменяем предыдущий тест, если он ещё идёт
+        // Cancel the previous test if it is still running.
         proxyHealthTask?.cancel()
 
         let d = UserDefaults.standard
@@ -154,10 +154,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let testUrl = d.string(forKey: "testUrl") ?? "https://ifconfig.co/ip"
 
         proxyHealthTask = Task {
-            // небольшая задержка: дать системе применить прокси
+            // Short delay: allow the system to apply the proxy.
             try? await Task.sleep(nanoseconds: 400_000_000)
 
-            let res = await ProxyTester.shared.testProxy(ip: ip, port: port, proto: proto, testUrl: testUrl)
+            let res = await ProxyChecker.shared.testProxy(ip: ip, port: port, proto: proto, testUrl: testUrl)
             if Task.isCancelled { return }
 
             switch res {
