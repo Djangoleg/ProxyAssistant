@@ -4,6 +4,7 @@ Minimal macOS menu bar utility for enabling and disabling system proxy (HTTP / H
 
 Designed as a lightweight tool for developers and advanced users who frequently switch proxy configurations.
 
+![image info](./Media/pa_screen.png)
 ---
 
 ## ✨ Features
