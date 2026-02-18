@@ -15,5 +15,9 @@ struct ProxyAssistantApp: App {
         Settings {
             EmptyView()
         }
+        .commands {
+            // Remove "Settings…" from menu bar.
+            CommandGroup(replacing: .appSettings) { }
+        }
     }
 }
