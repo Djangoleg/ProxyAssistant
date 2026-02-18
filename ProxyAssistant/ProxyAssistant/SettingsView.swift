@@ -97,10 +97,6 @@ struct SettingsView: View {
 
                 Button("Save") { save() }
                     .disabled(!isDirty)
-
-                Button("Close") {
-                    NSApp.keyWindow?.close()
-                }
             }
             .padding(.top, 10)
             
