@@ -17,6 +17,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var proxyHealthTask: Task<Void, Never>?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        
+        // Remove from dock.
+        NSApp.setActivationPolicy(.accessory)
+        
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         // App icon image.

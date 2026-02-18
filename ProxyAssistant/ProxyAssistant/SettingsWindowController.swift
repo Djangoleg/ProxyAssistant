@@ -8,34 +8,34 @@
 import Cocoa
 import SwiftUI
 
-class SettingsWindowController: NSWindowController {
-
+final class SettingsWindowController: NSObject, NSWindowDelegate {
     static let shared = SettingsWindowController()
 
-    private init() {
-        let view = SettingsView()
-        let hosting = NSHostingController(rootView: view)
-
-        let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 380, height: 350),
-            styleMask: [.titled, .closable],
-            backing: .buffered,
-            defer: false
-        )
-
-        window.center()
-        window.title = "Settings"
-        window.contentView = hosting.view
-
-        super.init(window: window)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private var window: NSWindow?
 
     func show() {
-        self.window?.makeKeyAndOrderFront(nil)
+        if window == nil {
+            let view = SettingsView()
+            let hosting = NSHostingController(rootView: view)
+
+            let w = NSWindow(contentViewController: hosting)
+            w.title = "Settings"
+            w.styleMask = [.titled, .closable]
+            w.isReleasedWhenClosed = false
+            w.delegate = self
+            window = w
+        }
+
+        // Set app regular.
+        NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
+
+        window?.center()
+        window?.makeKeyAndOrderFront(nil)
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        // Return menubar-only.
+        NSApp.setActivationPolicy(.accessory)
     }
 }
