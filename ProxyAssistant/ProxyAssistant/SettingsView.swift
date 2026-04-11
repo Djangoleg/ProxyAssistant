@@ -36,7 +36,8 @@ struct SettingsView: View {
     
     @State private var isLoading = true
 
-    let interfaces = ProxyService.shared.getAvailableInterfaces()
+    @State private var interfaces: [String] = []
+    
     let protocols = ["socks", "http", "https"]
     
     enum TestMode {
@@ -122,7 +123,12 @@ struct SettingsView: View {
             iface = savedInterface
             proto = savedProto
             testUrl = savedTestUrl
-
+            
+            interfaces = ProxyService.shared.getAvailableInterfaces()
+            if interfaces.isEmpty {
+                interfaces = ["Wi-Fi"]
+            }
+            
             let systemLaunch = AutoLaunchService.shared.isEnabled()
             launchAtLogin = systemLaunch
             savedLaunchAtLogin = systemLaunch
@@ -158,7 +164,7 @@ struct SettingsView: View {
             let res: Result<String, Error>
 
             if systemProxyEnabled {
-                currentTestMode = .proxy
+                await MainActor.run { currentTestMode = .proxy }
                 res = await ProxyChecker.shared.testProxy(
                     ip: ip,
                     port: port,
@@ -166,7 +172,7 @@ struct SettingsView: View {
                     testUrl: testUrl
                 )
             } else {
-                currentTestMode = .direct
+                await MainActor.run { currentTestMode = .direct }
                 res = await ProxyChecker.shared.testDirect(testUrl: testUrl)
             }
 
