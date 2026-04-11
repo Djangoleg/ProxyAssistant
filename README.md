@@ -49,7 +49,15 @@ The app:
 
 ## 🚀 Installation
 
-### Option 1 – Build from Source
+### Option 1 – Install from Prebuilt DMG
+
+1. Open the [Releases page](https://github.com/Djangoleg/ProxyAssistant/releases)
+2. Download the latest `ProxyAssistant.dmg`
+3. Open the disk image
+4. Drag **ProxyAssistant.app** into **Applications**
+5. Launch it from **Applications** or **Launchpad**
+
+### Option 2 – Build from Source
 
 1. Clone the repository
 2. Open `ProxyAssistant.xcodeproj` in Xcode
@@ -60,16 +68,21 @@ The app:
 /Applications
 ```
 
-If macOS blocks the application:
+If macOS blocks the application on first launch:
 
-- Right-click → **Open**
+1. Right-click **ProxyAssistant.app**
+2. Select **Open**
+3. Confirm the security prompt
 
-or remove quarantine attribute:
+Or use:
+
+**System Settings → Privacy & Security → Open Anyway**
+
+If the app still does not open, remove the quarantine attribute manually:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/ProxyAssistant.app
 ```
-
 ---
 
 ## 🧭 Usage
