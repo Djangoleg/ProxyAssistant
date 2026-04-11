@@ -166,4 +166,16 @@ final class ProxyService {
             }
         }
     }
+    
+    func getAvailableInterfaces() -> [String] {
+        let output = runCommandWithOutput(args: ["-listallnetworkservices"])
+
+        return output
+            .split(separator: "\n")
+            .map(String.init)
+            .filter {
+                !$0.contains("An asterisk")
+                && !$0.trimmingCharacters(in: .whitespaces).isEmpty
+            }
+    }
 }

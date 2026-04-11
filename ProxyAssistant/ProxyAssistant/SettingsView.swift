@@ -36,7 +36,7 @@ struct SettingsView: View {
     
     @State private var isLoading = true
 
-    let interfaces = ["Wi-Fi", "Ethernet", "Thunderbolt Bridge"]
+    let interfaces = ProxyService.shared.getAvailableInterfaces()
     let protocols = ["socks", "http", "https"]
     
     enum TestMode {
