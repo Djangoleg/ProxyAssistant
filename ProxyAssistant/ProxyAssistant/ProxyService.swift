@@ -178,4 +178,22 @@ final class ProxyService {
                 && !$0.trimmingCharacters(in: .whitespaces).isEmpty
             }
     }
+    
+    func applySavedProxyIfEnabled(
+        oldInterface: String,
+        newInterface: String,
+        ip: String,
+        port: String,
+        proto: String
+    ) {
+        guard isAnyProxyEnabled(interface: oldInterface) else { return }
+
+        disableProxy(interface: oldInterface)
+
+        if oldInterface != newInterface {
+            disableProxy(interface: newInterface)
+        }
+
+        enableProxy(ip: ip, port: port, interface: newInterface, proto: proto)
+    }
 }

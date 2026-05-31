@@ -190,6 +190,16 @@ struct SettingsView: View {
     }
 
     private func save() {
+        let oldInterface = savedInterface
+
+        ProxyService.shared.applySavedProxyIfEnabled(
+            oldInterface: oldInterface,
+            newInterface: iface,
+            ip: ip,
+            port: port,
+            proto: proto
+        )
+
         savedIP = ip
         savedPort = port
         savedInterface = iface
@@ -198,7 +208,6 @@ struct SettingsView: View {
         savedLaunchAtLogin = launchAtLogin
 
         isDirty = false
-
         testResultText = nil
         testErrorText = nil
     }
